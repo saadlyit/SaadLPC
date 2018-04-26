@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5322ea8176264cc499695939f19137d2" Name="Diagram1">
+        <EntityTypeShape EntityType="ReportsModel.Breakdown_Maintenance" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ReportsModel.Component_Information" Width="1.5" PointX="2.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ReportsModel.Employee" Width="1.5" PointX="0.75" PointY="1" />
+        <EntityTypeShape EntityType="ReportsModel.sysdiagram" Width="1.5" PointX="4.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ReportsModel.usertable" Width="1.5" PointX="6.75" PointY="3.75" />
+        <EntityTypeShape EntityType="ReportsModel.Maintenance_services" Width="1.5" PointX="3" PointY="0.875" />
+        <EntityTypeShape EntityType="ReportsModel.systranschema" Width="1.5" PointX="6.75" PointY="6.75" />
+        <AssociationConnector Association="ReportsModel.FK_Maintenance_services_Employee" />
+        <EntityTypeShape EntityType="ReportsModel.SysLogEvent" Width="1.5" PointX="5.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

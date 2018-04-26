@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ReportsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Breakdown_Maintenance">
+          <Key>
+            <PropertyRef Name="Equipment_ID" />
+          </Key>
+          <Property Name="Equipment_ID" Type="int" Nullable="false" />
+          <Property Name="Maintainance_Date" Type="date" />
+          <Property Name="Service_provider_details" Type="text" />
+          <Property Name="Equipment_down_time" Type="time" Precision="7" />
+          <Property Name="Maintenance_cost" Type="float" />
+          <Property Name="Shutdown_maintenance_cost" Type="float" />
+          <Property Name="Breakdown_maintenance_cost" Type="float" />
+          <Property Name="Equipment_name" Type="text" />
+        </EntityType>
+        <EntityType Name="Component_Information">
+          <Key>
+            <PropertyRef Name="Component_Number" />
+          </Key>
+          <Property Name="Component_Number" Type="int" Nullable="false" />
+          <Property Name="Compnent_Name" Type="text" />
+          <Property Name="Replacement_Date" Type="date" />
+          <Property Name="Equipment_down_time" Type="time" Precision="7" />
+          <Property Name="Cost" Type="float" />
+          <Property Name="Equipmment_Name" Type="text" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Social_security" />
+          </Key>
+          <Property Name="Social_security" Type="int" Nullable="false" />
+          <Property Name="Service_Date" Type="text" />
+          <Property Name="Description_" Type="text" />
+          <Property Name="Skills_Required" Type="text" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Reports.dbo.Maintenance_services' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Maintenance_services">
+          <Key>
+            <PropertyRef Name="social_security" />
+          </Key>
+          <Property Name="social_security" Type="int" Nullable="false" />
+          <Property Name="Name" Type="text" />
+          <Property Name="Replacement_Date" Type="date" />
+          <Property Name="cost" Type="float" />
+          <Property Name="Shutdown_Maintenance" Type="text" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="SysLogEvents">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar(max)" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Status" Type="nvarchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Reports.dbo.systranschemas' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="systranschemas">
+          <Key>
+            <PropertyRef Name="tabid" />
+            <PropertyRef Name="startlsn" />
+            <PropertyRef Name="endlsn" />
+            <PropertyRef Name="typeid" />
+          </Key>
+          <Property Name="tabid" Type="int" Nullable="false" />
+          <Property Name="startlsn" Type="binary" MaxLength="10" Nullable="false" />
+          <Property Name="endlsn" Type="binary" MaxLength="10" Nullable="false" />
+          <Property Name="typeid" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="usertable">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Username" Type="varchar(max)" />
+          <Property Name="Password" Type="varchar(max)" />
+          <Property Name="access_level" Type="int" />
+        </EntityType>
+        <Association Name="FK_Maintenance_services_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Maintenance_services" Type="Self.Maintenance_services" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Social_security" />
+            </Principal>
+            <Dependent Role="Maintenance_services">
+              <PropertyRef Name="social_security" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ReportsModelStoreContainer">
+          <EntitySet Name="Breakdown_Maintenance" EntityType="Self.Breakdown_Maintenance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Component_Information" EntityType="Self.Component_Information" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SysLogEvents" EntityType="Self.SysLogEvents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="usertable" EntityType="Self.usertable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Maintenance_services" EntityType="Self.Maintenance_services" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Maintenance_services].[social_security] AS [social_security], 
+    [Maintenance_services].[Name] AS [Name], 
+    [Maintenance_services].[Replacement_Date] AS [Replacement_Date], 
+    [Maintenance_services].[cost] AS [cost], 
+    [Maintenance_services].[Shutdown_Maintenance] AS [Shutdown_Maintenance]
+    FROM [dbo].[Maintenance_services] AS [Maintenance_services]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="systranschemas" EntityType="Self.systranschemas" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [systranschemas].[tabid] AS [tabid], 
+    [systranschemas].[startlsn] AS [startlsn], 
+    [systranschemas].[endlsn] AS [endlsn], 
+    [systranschemas].[typeid] AS [typeid]
+    FROM [dbo].[systranschemas] AS [systranschemas]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Maintenance_services_Employee" Association="Self.FK_Maintenance_services_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Maintenance_services" EntitySet="Maintenance_services" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ReportsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ReportsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Breakdown_Maintenance" EntityType="ReportsModel.Breakdown_Maintenance" />
+          <EntitySet Name="Component_Information" EntityType="ReportsModel.Component_Information" />
+          <EntitySet Name="Employees" EntityType="ReportsModel.Employee" />
+          <EntitySet Name="sysdiagrams" EntityType="ReportsModel.sysdiagram" />
+          <EntitySet Name="usertables" EntityType="ReportsModel.usertable" />
+          <EntitySet Name="Maintenance_services" EntityType="ReportsModel.Maintenance_services" />
+          <EntitySet Name="systranschemas" EntityType="ReportsModel.systranschema" />
+          <AssociationSet Name="FK_Maintenance_services_Employee" Association="ReportsModel.FK_Maintenance_services_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Maintenance_services" EntitySet="Maintenance_services" />
+          </AssociationSet>
+          <EntitySet Name="SysLogEvents" EntityType="ReportsModel.SysLogEvent" />
+        </EntityContainer>
+        <EntityType Name="Breakdown_Maintenance">
+          <Key>
+            <PropertyRef Name="Equipment_ID" />
+          </Key>
+          <Property Name="Equipment_ID" Type="Int32" Nullable="false" />
+          <Property Name="Maintainance_Date" Type="DateTime" Precision="0" />
+          <Property Name="Service_provider_details" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Equipment_down_time" Type="Time" Precision="7" />
+          <Property Name="Maintenance_cost" Type="Double" />
+          <Property Name="Shutdown_maintenance_cost" Type="Double" />
+          <Property Name="Breakdown_maintenance_cost" Type="Double" />
+          <Property Name="Equipment_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Component_Information">
+          <Key>
+            <PropertyRef Name="Component_Number" />
+          </Key>
+          <Property Name="Component_Number" Type="Int32" Nullable="false" />
+          <Property Name="Compnent_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Replacement_Date" Type="DateTime" Precision="0" />
+          <Property Name="Equipment_down_time" Type="Time" Precision="7" />
+          <Property Name="Cost" Type="Double" />
+          <Property Name="Equipmment_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Social_security" />
+          </Key>
+          <Property Name="Social_security" Type="Int32" Nullable="false" />
+          <Property Name="Service_Date" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Description_" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Skills_Required" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Maintenance_services" Relationship="ReportsModel.FK_Maintenance_services_Employee" FromRole="Employee" ToRole="Maintenance_services" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="usertable">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="access_level" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Maintenance_services">
+          <Key>
+            <PropertyRef Name="social_security" />
+          </Key>
+          <Property Name="social_security" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Replacement_Date" Type="DateTime" Precision="0" />
+          <Property Name="cost" Type="Double" />
+          <Property Name="Shutdown_Maintenance" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Employee" Relationship="ReportsModel.FK_Maintenance_services_Employee" FromRole="Maintenance_services" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="systranschema">
+          <Key>
+            <PropertyRef Name="tabid" />
+            <PropertyRef Name="startlsn" />
+            <PropertyRef Name="endlsn" />
+            <PropertyRef Name="typeid" />
+          </Key>
+          <Property Name="tabid" Type="Int32" Nullable="false" />
+          <Property Name="startlsn" Type="Binary" Nullable="false" MaxLength="10" FixedLength="true" />
+          <Property Name="endlsn" Type="Binary" Nullable="false" MaxLength="10" FixedLength="true" />
+          <Property Name="typeid" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Maintenance_services_Employee">
+          <End Type="ReportsModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="ReportsModel.Maintenance_services" Role="Maintenance_services" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Social_security" />
+            </Principal>
+            <Dependent Role="Maintenance_services">
+              <PropertyRef Name="social_security" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SysLogEvent">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ReportsModelStoreContainer" CdmEntityContainer="ReportsEntities">
+          <EntitySetMapping Name="Breakdown_Maintenance">
+            <EntityTypeMapping TypeName="ReportsModel.Breakdown_Maintenance">
+              <MappingFragment StoreEntitySet="Breakdown_Maintenance">
+                <ScalarProperty Name="Equipment_name" ColumnName="Equipment_name" />
+                <ScalarProperty Name="Breakdown_maintenance_cost" ColumnName="Breakdown_maintenance_cost" />
+                <ScalarProperty Name="Shutdown_maintenance_cost" ColumnName="Shutdown_maintenance_cost" />
+                <ScalarProperty Name="Maintenance_cost" ColumnName="Maintenance_cost" />
+                <ScalarProperty Name="Equipment_down_time" ColumnName="Equipment_down_time" />
+                <ScalarProperty Name="Service_provider_details" ColumnName="Service_provider_details" />
+                <ScalarProperty Name="Maintainance_Date" ColumnName="Maintainance_Date" />
+                <ScalarProperty Name="Equipment_ID" ColumnName="Equipment_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Component_Information">
+            <EntityTypeMapping TypeName="ReportsModel.Component_Information">
+              <MappingFragment StoreEntitySet="Component_Information">
+                <ScalarProperty Name="Equipmment_Name" ColumnName="Equipmment_Name" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Equipment_down_time" ColumnName="Equipment_down_time" />
+                <ScalarProperty Name="Replacement_Date" ColumnName="Replacement_Date" />
+                <ScalarProperty Name="Compnent_Name" ColumnName="Compnent_Name" />
+                <ScalarProperty Name="Component_Number" ColumnName="Component_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="ReportsModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="Skills_Required" ColumnName="Skills_Required" />
+                <ScalarProperty Name="Description_" ColumnName="Description_" />
+                <ScalarProperty Name="Service_Date" ColumnName="Service_Date" />
+                <ScalarProperty Name="Social_security" ColumnName="Social_security" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="ReportsModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usertables">
+            <EntityTypeMapping TypeName="ReportsModel.usertable">
+              <MappingFragment StoreEntitySet="usertable">
+                <ScalarProperty Name="access_level" ColumnName="access_level" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Maintenance_services">
+            <EntityTypeMapping TypeName="ReportsModel.Maintenance_services">
+              <MappingFragment StoreEntitySet="Maintenance_services">
+                <ScalarProperty Name="Shutdown_Maintenance" ColumnName="Shutdown_Maintenance" />
+                <ScalarProperty Name="cost" ColumnName="cost" />
+                <ScalarProperty Name="Replacement_Date" ColumnName="Replacement_Date" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="social_security" ColumnName="social_security" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="systranschemas">
+            <EntityTypeMapping TypeName="ReportsModel.systranschema">
+              <MappingFragment StoreEntitySet="systranschemas">
+                <ScalarProperty Name="typeid" ColumnName="typeid" />
+                <ScalarProperty Name="endlsn" ColumnName="endlsn" />
+                <ScalarProperty Name="startlsn" ColumnName="startlsn" />
+                <ScalarProperty Name="tabid" ColumnName="tabid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SysLogEvents">
+            <EntityTypeMapping TypeName="ReportsModel.SysLogEvent">
+              <MappingFragment StoreEntitySet="SysLogEvents">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
